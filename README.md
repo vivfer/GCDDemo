@@ -50,6 +50,7 @@ static NSOperationQueue * queue;
 如果使用GCD，以上3个方法都可以放到一起，如下所示：
 
 ```
+```
 // 原代码块一
 self.indicator.hidden = NO;
 [self.indicator startAnimating];
@@ -69,11 +70,11 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSLog(@"error when download:%@", error);
     }
 });
+```
 首先我们可以看到，代码变短了。因为少了原来3个方法的定义，也少了相互之间需要传递的变量的封装。
 另外，代码变清楚了，虽然是异步的代码，但是它们被GCD合理的整合在一起，逻辑非常清晰。如果应用上MVC模式，我们也可以将View Controller层的回调函数用GCD的方式传递给Modal层，这相比以前用@selector的方式，代码的逻辑关系会更加清楚。
 GCD的定义
 简单GCD的定义有点象函数指针，差别是用 ^ 替代了函数指针的 * 号，如下所示：
-
 ```
  // 申明变量
  (void) (^loggerBlock)(void);
@@ -84,14 +85,14 @@ GCD的定义
  };
  // 调用
  loggerBlock();
+ ```
 但是大多数时候，我们通常使用内联的方式来定义它，即将它的程序块写在调用的函数里面，例如这样：
 
-1
-2
-3
+```
  dispatch_async(dispatch_get_global_queue(0, 0), ^{
       // something
  });
+ ```
 从上面大家可以看出，block有如下特点：
 	1.	程序块可以在代码中以内联的方式来定义。
 	2.	程序块可以访问在创建它的范围内的可用的变量。
@@ -118,6 +119,7 @@ GCD的定义
  dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
      // code to be executed on the main queue after delay
  });
+ ```
 dispatch_queue_t 也可以自己定义，如要要自定义queue，可以用dispatch_queue_create方法，示例如下：
 
 ```
@@ -126,6 +128,7 @@ dispatch_async(urls_queue, ^{
      // your code
 });
 dispatch_release(urls_queue);
+```
 另外，GCD还有一些高级用法，例如让后台2个线程并行执行，然后等2个线程都结束后，再汇总执行结果。这个可以用dispatch_group, dispatch_group_async 和 dispatch_group_notify来实现，示例如下：
 
 ```
@@ -139,6 +142,7 @@ dispatch_release(urls_queue);
  dispatch_group_notify(group, dispatch_get_global_queue(0,0), ^{
       // 汇总结果
  });
+ ```
 修改block之外的变量
 默认情况下，在程序块中访问的外部变量是复制过去的，即写操作不对原变量生效。但是你可以加上 __block来让其写操作生效，示例代码如下：
 
@@ -149,6 +153,7 @@ dispatch_release(urls_queue);
  }
  foo();
  // 这里，a的值被修改为1
+ ```
 后台运行
 使用block的另一个用处是可以让程序在后台较长久的运行。在以前，当app被按home键退出后，app仅有最多5秒钟的时候做一些保存或清理资源的工作。但是应用可以调用UIApplication的beginBackgroundTaskWithExpirationHandler方法，让app最多有10分钟的时间在后台长久运行。这个时间可以用来做清理本地缓存，发送统计数据等工作。
 让程序在后台长久运行的示例代码如下：
@@ -177,5 +182,6 @@ dispatch_release(urls_queue);
     [[UIApplication sharedApplication] endBackgroundTask: self.backgroundUpdateTask];
     self.backgroundUpdateTask = UIBackgroundTaskInvalid;
 }
+```
 总结
 总体来说，GCD能够极大地方便开发者进行多线程编程。大家应该尽量使用GCD来处理后台线程和UI线程的交互。
