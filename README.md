@@ -45,11 +45,10 @@ static NSOperationQueue * queue;
     self.content.text = data;
     [queue release];
 }
-
+```
 使用GCD后
 如果使用GCD，以上3个方法都可以放到一起，如下所示：
 
-```
 ```
 // 原代码块一
 self.indicator.hidden = NO;
