@@ -9,7 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface ViewController : UIViewController
+@property (retain, nonatomic) IBOutlet UITextView *textView;
+@property (retain, nonatomic) IBOutlet UITextView *GCDTextView;
 
+- (IBAction)click:(id)sender;
+- (IBAction)CGDClick:(id)sender;
 
 @end
 

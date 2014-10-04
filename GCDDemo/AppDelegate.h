@@ -11,6 +11,13 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
+{
+    
+}
+
+//GCD后台运行
+@property(assign ,nonatomic)UIBackgroundTaskIdentifier bgTask;
+
 @property (strong, nonatomic) UIWindow *window;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
